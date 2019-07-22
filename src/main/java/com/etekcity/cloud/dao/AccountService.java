@@ -17,7 +17,7 @@ public interface AccountService {
      *
      * @param user
      * @return 错误码或成功
-     * @throws ception all kinds of exceptions
+     * @throws exception all kinds of exceptions
      */
     void addAccount(User user) throws Exception;
 

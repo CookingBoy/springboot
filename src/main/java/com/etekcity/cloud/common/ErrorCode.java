@@ -31,10 +31,15 @@ public enum ErrorCode {
     TOKEN_INVALIDE_ERROR(-20201, "用户凭证已失效(过期、登出)"),
     TOKEN_ERROR(-20202, "用户凭证错误，非该用户token"),
     NICKNAME_FORMAT_ERROR(-20103, "昵称不合法"),
-    ADDRESS_FORMAT_ERROR(-20101, "地址不合法"),
+    ADDRESS_FORMAT_ERROR(-20104, "地址不合法"),
     OLD_PASSWORD_FORMAT_ERROR(-20105, "旧密码不合法"),
     NEW_PASSWORD_FORMAT_ERROR(-20106, "新密码不合法"),
-    OLD_PASSWORD_ERROR(-20112, "老密码不正确");
+    OLD_PASSWORD_ERROR(-20112, "老密码不正确"),
+
+    /**
+     * 请求参数错误
+     */
+    INVALID_REQUEST_PARAM(-20107, "请求参数错误");
 
 
     private int code;

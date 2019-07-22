@@ -1,6 +1,8 @@
 package com.etekcity.cloud.util;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,14 +23,9 @@ public class Test {
         String test2 = "123 abc";
         String[] str = test2.split(" ");
         //UTC时间
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        String time1 = sdf1.format(new Date());
-        String time2 = sdf2.format(new Date());
-        System.out.println(time1 + "\n" + time2);
-
-       /* Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(content);*/
-        System.out.println(isMatch);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String strDate = dateTimeFormatter.format(localDateTime);
+        System.out.println(strDate);
     }
 }

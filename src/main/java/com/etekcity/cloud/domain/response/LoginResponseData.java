@@ -13,25 +13,25 @@ import com.etekcity.cloud.util.GetFormatTime;
 @Data
 public class LoginResponseData {
 
-    private long id;
-
-    private String email;
-
     private String token;
 
     private int expiresIn;
 
-    private String createAt;
+    private long userId;
 
-    private String updateAt;
+    private String email;
 
     private String nickname;
 
     private String address;
 
+    private String createAt;
+
+    private String updateAt;
+
     public LoginResponseData(User user) throws Exception {
 
-        id = user.getId();
+        userId = user.getId();
 
         email = user.getEmail();
 

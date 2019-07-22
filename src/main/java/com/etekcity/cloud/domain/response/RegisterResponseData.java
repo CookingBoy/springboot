@@ -15,13 +15,13 @@ import com.etekcity.cloud.util.GetFormatTime;
 @JsonSerialize
 public class RegisterResponseData {
 
-    private long id;
+    private long userId;
 
     private String createAt;
 
     public RegisterResponseData(User user) throws Exception {
 
-        id = user.getId();
+        userId = user.getId();
 
         createAt = GetFormatTime.toUtcTime(user.getCreateAt());
     }

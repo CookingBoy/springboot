@@ -1,7 +1,11 @@
 package com.etekcity.cloud.dao.impl;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
+import javax.swing.table.TableRowSorter;
+
+import com.mysql.cj.jdbc.exceptions.SQLError;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -34,7 +38,7 @@ public class AcountServiceImpl implements AccountService {
         //产生一个20位的随机盐值
         user.setSalt(RandomStringUtils.randomAlphanumeric(20));
         //对密码加盐哈希
-        String hashPassword = HashWithSalt.getMD5String(user.getPassword() + user.getSalt());
+        String hashPassword = HashWithSalt.getMd5String(user.getPassword() + user.getSalt());
         user.setPassword(hashPassword);
         //并发验证，返回错误码
         try {
@@ -52,7 +56,7 @@ public class AcountServiceImpl implements AccountService {
             throw new UserServiceException(ErrorCode.EMAIL_NOT_EXIST_ERROR);
         }
         //将数据库中的密码和盐值一起哈希
-        String enteredPassword = HashWithSalt.getMD5String(password + user.getSalt());
+        String enteredPassword = HashWithSalt.getMd5String(password + user.getSalt());
         if (!user.getPassword().equals(enteredPassword)) {
             throw new UserServiceException(ErrorCode.PASSWORD_ERROR);
         }
@@ -79,14 +83,14 @@ public class AcountServiceImpl implements AccountService {
     @Override
     public void updatePwdById(String oldPassword, String newPassword, long id) throws Exception {
         User user = userMapper.selectById(id);
-        String enteredPassword = HashWithSalt.getMD5String(oldPassword + user.getSalt());
+        String enteredPassword = HashWithSalt.getMd5String(oldPassword + user.getSalt());
         //由于有密码格式校验，所以这里输入的不为空
         if (!enteredPassword.equals(user.getPassword())) {
             throw new UserServiceException(ErrorCode.OLD_PASSWORD_ERROR);
         }
         //重新生成盐值
         String newSalt = RandomStringUtils.randomAlphanumeric(20);
-        String hashPassword = HashWithSalt.getMD5String(newPassword + newSalt);
+        String hashPassword = HashWithSalt.getMd5String(newPassword + newSalt);
         userMapper.updatePwdById(hashPassword, newSalt, id);
     }
 }

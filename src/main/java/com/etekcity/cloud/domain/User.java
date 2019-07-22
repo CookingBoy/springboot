@@ -3,6 +3,7 @@ package com.etekcity.cloud.domain;
 
 /**
  * 用户实体类
+ * @author vik
  */
 public class User {
     /**

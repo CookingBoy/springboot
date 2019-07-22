@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.ws.handler.LogicalHandler;
 
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -36,6 +37,7 @@ import com.etekcity.cloud.dao.AccountService;
  * @author vik
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
 
@@ -47,6 +49,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData<RegisterResponseData> register(RegisterAndLoginRequestData ralData) throws Exception {
 
+        log.info("Register request received: {} ", ralData.getEmail());
         //参数校验
         CheckUtils.emailFormatCheck(ralData.getEmail());
         CheckUtils.passwordFormatCheck(ralData.getPassword(), "pwd");
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService {
         accountService.addAccount(user);
         //构造返回结果
         RegisterResponseData registerResponseData = new RegisterResponseData(user);
+        log.info("Register request received: {}. resp: {}", ralData, registerResponseData);
         return new ResponseData<>(ErrorCode.SUCCESS, registerResponseData);
 
 
@@ -66,6 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseData<LoginResponseData> login(RegisterAndLoginRequestData ralData) throws Exception {
+        log.info("Login request received: {} ", ralData.getEmail());
         //参数校验
         CheckUtils.emailFormatCheck(ralData.getEmail());
         CheckUtils.passwordFormatCheck(ralData.getPassword(), "pwd");
@@ -75,13 +80,15 @@ public class UserServiceImpl implements UserService {
         LoginResponseData loginResponseData = new LoginResponseData(user);
         //生成token并写入redis(调用函数)，生成不重复的token
         String token = UUID.randomUUID().toString();
-        tokenDao.addToken(token, loginResponseData.getId());
+        tokenDao.addToken(token, loginResponseData.getUserId());
         loginResponseData.setToken(token);
+        log.info("Login request received: {}. resp: {}", ralData, loginResponseData);
         return new ResponseData<>(ErrorCode.SUCCESS, loginResponseData);
     }
 
     @Override
     public ResponseData logout(String authorization) throws Exception {
+
         //校验token
         tokenDao.tokenCheck(authorization);
         //删除token

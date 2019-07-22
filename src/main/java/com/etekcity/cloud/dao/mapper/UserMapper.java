@@ -6,6 +6,7 @@ import com.etekcity.cloud.domain.User;
 
 /**
  * 用户 DAO 接口类
+ * @author vik
  */
 @Mapper
 public interface UserMapper {

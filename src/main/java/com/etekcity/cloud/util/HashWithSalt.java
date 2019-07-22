@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * 加盐哈希算法
+ * @author vik
  */
 public class HashWithSalt {
 
@@ -21,7 +22,7 @@ public class HashWithSalt {
      * @return 加密结果
      * @author vik
      */
-    public static String getMD5String(String str) {
+    public static String getMd5String(String str) {
         MessageDigest messageDigest = null;
         try {
             messageDigest = MessageDigest.getInstance("MD5");

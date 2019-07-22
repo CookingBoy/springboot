@@ -13,21 +13,21 @@ import com.etekcity.cloud.util.GetFormatTime;
 @Data
 public class GetUserInfoResponseData {
 
-    private long id;
+    private long userId;
 
     private String email;
-
-    private String createAt;
-
-    private String updateAt;
 
     private String nickname;
 
     private String address;
 
+    private String createAt;
+
+    private String updateAt;
+
     public GetUserInfoResponseData(User user) throws Exception {
 
-        id = user.getId();
+        userId = user.getId();
 
         email = user.getEmail();
 
