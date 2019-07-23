@@ -1,0 +1,6 @@
+VERSION
+SERVICE.NAME=cloud-training
+
+SERVICE.VERSION=V1.0.1
+CHANGELOG
+【增加】日志打印，Redis和MySQL数据库的异常格式与自定义异常统一
