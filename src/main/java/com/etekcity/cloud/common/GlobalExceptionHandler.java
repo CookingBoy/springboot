@@ -1,25 +1,19 @@
 package com.etekcity.cloud.common;
 
 
-import java.sql.SQLException;
-import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Response;
 
-import com.mysql.cj.jdbc.exceptions.SQLError;
-import io.lettuce.core.RedisCommandExecutionException;
+import com.google.gson.JsonSyntaxException;
 import io.lettuce.core.RedisCommandTimeoutException;
 import io.lettuce.core.RedisConnectionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.mybatis.spring.MyBatisSystemException;
-import org.springframework.jdbc.CannotGetJdbcConnectionException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.etekcity.cloud.common.exception.UserServiceException;
-import com.etekcity.cloud.domain.request.RegisterAndLoginRequestData;
-import com.etekcity.cloud.domain.response.RegisterResponseData;
 import com.etekcity.cloud.domain.response.ResponseData;
 
 /**
@@ -29,50 +23,61 @@ import com.etekcity.cloud.domain.response.ResponseData;
  */
 @ControllerAdvice
 @Slf4j
+@ResponseBody
 public class GlobalExceptionHandler {
 
     /**
      * 处理自定义的错误码
+     *
      * @param exception
      * @return
      */
     @ExceptionHandler(UserServiceException.class)
-    @ResponseBody
-    public ResponseData<RegisterResponseData> exceptionHandler(UserServiceException exception) {
-        log.warn("Exception Occured: {}", exception.getErrorCode().getMsg());
-        return new ResponseData(exception.getErrorCode(), new HashMap<>(0));
+    public ResponseData exceptionHandler(UserServiceException exception) {
+        log.info("UserService Exception Occured: {}", exception.getErrorCode().getMsg());
+        return new ResponseData(exception.getErrorCode(), new Object());
     }
 
     /**
      * 处理请求参数缺失或格式不对的错误
+     *
      * @param e
      * @return
      */
-    @ExceptionHandler({NullPointerException.class, ArrayIndexOutOfBoundsException.class})
-    @ResponseBody
-    public ResponseData paramExceptionHandler(Exception e) {
-        log.warn("Warning: {}", e.getMessage(), e);
-        return new ResponseData(ErrorCode.INVALID_REQUEST_PARAM, new HashMap<>(0));
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseData paramExceptionHandler(Exception e, HttpServletRequest request) {
+        log.info("Request Param Exception Occured: ", e);
+        return new ResponseData(ErrorCode.INVALID_REQUEST_PARAM, new Object());
     }
 
     /**
-     * mysql数据库错误
+     * mysql与Redis连接数据库错误
      * MyBatisSystemException 也可以捕捉到
-    */
-    @ExceptionHandler(PersistenceException.class)
-    @ResponseBody
+     */
+    @ExceptionHandler({PersistenceException.class,RedisConnectionException.class})
     public ResponseData mysqlExceptionHandler(Exception e) {
-        log.error("Error Occured: {}", e);
-        return new ResponseData(ErrorCode.SERVER_INTERNAL_ERROR, new HashMap<>(0));
+        log.error("DataBase Error Occured: ", e);
+        return new ResponseData(ErrorCode.SERVER_INTERNAL_ERROR, new Object());
     }
 
     /**
      * redis数据库错误
-    */
-    @ExceptionHandler({RedisCommandTimeoutException.class, RedisConnectionException.class})
-    @ResponseBody
+     */
+    @ExceptionHandler(RedisCommandTimeoutException.class)
     public ResponseData redisExceptionHandler(Exception e) {
-        log.error("Error Occured: ", e);
-        return new ResponseData(ErrorCode.SERVER_INTERNAL_ERROR, new HashMap<>(0));
+        log.error("Redis Error Occured: ", e);
+        return new ResponseData(ErrorCode.SERVER_TIMEOUT, new Object());
+    }
+
+    /**
+     * request json格式错误
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(JsonSyntaxException.class)
+    public ResponseData jsonExceptionHandler(Exception e) {
+        log.info("Request Json Exception Occured: ", e);
+        return new ResponseData(ErrorCode.JSON_PARSE_ERROR, new Object());
     }
 }

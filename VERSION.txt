@@ -1,6 +1,14 @@
 VERSION
-SERVICE.NAME=cloud-training
+SERVICE.NAME=userservice
 
-SERVICE.VERSION=V1.0.1
+SERVICE.VERSION=V1.0.2.0
+CHANGELOG
+【优化】按照peter初步review意见进行了修改，并部署到了服务器
+
+SERVICE.VERSION=V1.0.1.0
 CHANGELOG
 【增加】日志打印，Redis和MySQL数据库的异常格式与自定义异常统一
+
+SERVICE.VERSION=V1.0.0.0
+CHANGELOG
+【增加】完成全部接口功能

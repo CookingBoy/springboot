@@ -28,7 +28,7 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXIST_ERROR(-20111, "邮箱已注册"),
     PASSWORD_ERROR(-20112, "密码不正确"),
     EMAIL_NOT_EXIST_ERROR(-20113, "邮箱不存在"),
-    TOKEN_INVALIDE_ERROR(-20201, "用户凭证已失效(过期、登出)"),
+    TOKEN_INVALID_ERROR(-20201, "用户凭证已失效(过期、登出)"),
     TOKEN_ERROR(-20202, "用户凭证错误，非该用户token"),
     NICKNAME_FORMAT_ERROR(-20103, "昵称不合法"),
     ADDRESS_FORMAT_ERROR(-20104, "地址不合法"),
@@ -39,8 +39,8 @@ public enum ErrorCode {
     /**
      * 请求参数错误
      */
-    INVALID_REQUEST_PARAM(-20107, "请求参数错误");
-
+    INVALID_REQUEST_PARAM(-10101, "请求参数错误"),
+    JSON_PARSE_ERROR(-10102, "Json格式错误");
 
     private int code;
     private String msg;

@@ -6,16 +6,13 @@ import lombok.Data;
 import com.etekcity.cloud.common.ErrorCode;
 
 /**
- * API Response请求体实体类
+ * API Response请求体 实体类
  * @author vik
  */
 @Data
 public class ResponseData<T> {
-
     private int code;
-
     private String msg;
-
     private T result;
 
     public ResponseData(ErrorCode errorCode, T result) {
@@ -28,7 +25,5 @@ public class ResponseData<T> {
     public String toString() {
         return "ResponseData{" + "code=" + code + ", msg='" + msg + '\'' + ", result="
                 + result + '}';
-
     }
-
 }

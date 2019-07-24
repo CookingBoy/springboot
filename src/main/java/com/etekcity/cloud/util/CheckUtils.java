@@ -1,8 +1,10 @@
 package com.etekcity.cloud.util;
 
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.etekcity.cloud.common.Constant;
 import com.etekcity.cloud.common.ErrorCode;
 import com.etekcity.cloud.common.exception.UserServiceException;
 import com.etekcity.cloud.service.UserService;
@@ -19,21 +21,13 @@ import com.etekcity.cloud.service.UserService;
  */
 public class CheckUtils {
 
-
-    private static final int PWD_MAX_LENGTH = 20;
-    private static final int PWD_MIN_LENGTH = 6;
-    private static final int NICKNAME_MAX_LENGTH = 32;
-    private static final int ADDRESS_MAX_LENGTH = 255;
-    private static final String PWD = "pwd";
-    private static final String OLD_PWD = "oldPwd";
-    private static final String NEW_PWD = "newPwd";
-
     /**
      * 邮箱格式校验
      */
-    public static void emailFormatCheck(String email) throws Exception {
-        String pattern = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
-        boolean isMatch = Pattern.matches(pattern, email);
+    public static void checkEmailFormat(String email) throws Exception {
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+        Matcher matcher = pattern.matcher(email);
+        boolean isMatch = matcher.matches();
         if (!isMatch) {
             throw new UserServiceException(ErrorCode.EMAIL_FORMAT_ERROR);
         }
@@ -42,31 +36,31 @@ public class CheckUtils {
     /**
      * 密码格式校验
      */
-    public static void passwordFormatCheck(String password, String type) throws Exception {
-        String pattern = "^[\\x21-\\x7e]*$";
+    public static void checkPasswordFormat(String password, String type) throws Exception {
+        Pattern pattern = Pattern.compile("^[\\x21-\\x7e]*$");
+        Matcher matcher = pattern.matcher(password);
+        boolean isMatch = matcher.matches();
         int len = password.length();
-        boolean isMatch = Pattern.matches(pattern, password);
-        if (len < PWD_MIN_LENGTH || len > PWD_MAX_LENGTH || !isMatch) {
-            if (PWD.equals(type)) {
+        if (len < Constant.PWD_MIN_LENGTH || len > Constant.PWD_MAX_LENGTH || !isMatch) {
+            if (Constant.PWD.equals(type)) {
                 throw new UserServiceException(ErrorCode.PASSWORD_FORMAT_ERROR);
             }
-            if (OLD_PWD.equals(type)) {
+            if (Constant.OLD_PWD.equals(type)) {
                 throw new UserServiceException(ErrorCode.OLD_PASSWORD_FORMAT_ERROR);
             }
-            if (NEW_PWD.equals(type)) {
+            if (Constant.NEW_PWD.equals(type)) {
                 throw new UserServiceException(ErrorCode.NEW_PASSWORD_FORMAT_ERROR);
             }
         }
-
     }
 
     /**
      * 昵称格式校验
      */
-    public static void nicknameFormatCheck(String nickname) throws Exception {
+    public static void checkNicknameFormat(String nickname) throws Exception {
         if (nickname != null) {
             int len = nickname.length();
-            if (len > NICKNAME_MAX_LENGTH) {
+            if (len > Constant.NICKNAME_MAX_LENGTH) {
                 throw new UserServiceException(ErrorCode.NICKNAME_FORMAT_ERROR);
             }
         }
@@ -75,10 +69,10 @@ public class CheckUtils {
     /**
      * 地址格式校验
      */
-    public static void addressFormatCheck(String address) throws Exception {
+    public static void checkAddressFormat(String address) throws Exception {
         if (address != null) {
             int len = address.length();
-            if (len > ADDRESS_MAX_LENGTH) {
+            if (len > Constant.ADDRESS_MAX_LENGTH) {
                 throw new UserServiceException(ErrorCode.ADDRESS_FORMAT_ERROR);
             }
         }
