@@ -35,11 +35,11 @@ public class TokenManage {
     public void addToken(String token, long id) {
         String tokenListValue = getTokenListKey(String.valueOf(id));
         String tokenStringValue = getTokenStringKey(token);
-        //先把token存进去，再判断token list里面token的数量,不会造成NullPointerException
+        // 先把token存进去，再判断token list里面token的数量,不会造成NullPointerException
         stringRedisTemplate.opsForValue().set(tokenStringValue, (id + ""), Constant.REDIS_EXPIRES_IN, TimeUnit.SECONDS);
         stringRedisTemplate.opsForList().leftPush(tokenListValue, token);
         long tokenNumber = stringRedisTemplate.opsForList().size(tokenListValue);
-        //删除最早生成的token,并发考虑用while而不用if
+        // 删除最早生成的token,并发考虑用while而不用if
         if (tokenNumber > Constant.MAX_TOKEN_LIST_NUMBER) {
             List<String> deletedTokens = stringRedisTemplate.opsForList().range(tokenListValue, 5, 10);
             for (String t : deletedTokens) {
@@ -57,19 +57,19 @@ public class TokenManage {
      * @throws Exception
      */
     public String checkToken(String authorization) throws Exception {
-        //获取token和id
+        // 获取token和id
         HashMap<String, String> tokenAndIdMap = getInfoFromAuth(authorization);
         String token = tokenAndIdMap.get("token");
         String id = tokenAndIdMap.get("id");
-        //构造key
+        // 构造key
         String tokenStringValue = getTokenStringKey(token);
-        //查询token是否为空,为空时返回null
+        // 查询token是否为空,为空时返回null
         String tokenAlreadyExist = stringRedisTemplate.opsForValue().get(tokenStringValue);
-        //检查是否还在有效期和id与token是否对应
+        // 检查是否还在有效期和id与token是否对应
         if (tokenAlreadyExist == null) {
             throw new UserServiceException(ErrorCode.TOKEN_INVALID_ERROR);
         }
-        if (!id.equals(tokenAlreadyExist)) {
+        if (!tokenAlreadyExist.equals(id)) {
             throw new UserServiceException(ErrorCode.TOKEN_ERROR);
         }
         return id;
@@ -82,14 +82,14 @@ public class TokenManage {
      * @throws Exception
      */
     public void deleteOneToken(String authorization) throws Exception {
-        //获取token和id
+        // 获取token和id
         HashMap<String, String> tokenAndIdMap = getInfoFromAuth(authorization);
         String token = tokenAndIdMap.get("token");
         String id = tokenAndIdMap.get("id");
-        //构造key
+        // 构造key
         String tokenListValue = getTokenListKey(id);
         String tokenStringValue = getTokenStringKey(token);
-        //删除指定token
+        // 删除指定token
         stringRedisTemplate.opsForList().remove(tokenListValue, 1, token);
         stringRedisTemplate.delete(tokenStringValue);
     }
@@ -101,13 +101,13 @@ public class TokenManage {
      * @throws Exception
      */
     public void deleteAllToken(String authorization) throws Exception {
-        //获取token和id
+        // 获取token和id
         HashMap<String, String> tokenAndIdMap = getInfoFromAuth(authorization);
         String token = tokenAndIdMap.get("token");
         String id = tokenAndIdMap.get("id");
-        //构造key
+        // 构造key
         String tokenListValue = getTokenListKey(id);
-        //删除该用户之前的所有token,
+        // 删除该用户之前的所有token,
         List<String> allToken = stringRedisTemplate.opsForList().range(tokenListValue, 0, 4);
         for (String t : allToken) {
             stringRedisTemplate.delete(getTokenStringKey(t));

@@ -45,33 +45,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData<RegisterResponseData> register(RegisterAndLoginRequestData ralData) throws Exception {
         log.info("Register request received: {} ", ralData);
-        //参数校验
+        // 参数校验
         CheckUtils.checkEmailFormat(ralData.getEmail());
         CheckUtils.checkPasswordFormat(ralData.getPassword(), "pwd");
-        //判断邮箱是否已存在
+        // 判断邮箱是否已存在
         User userInDb = userMapper.selectByEmail(ralData.getEmail());
         if (userInDb != null) {
             throw new UserServiceException(ErrorCode.EMAIL_ALREADY_EXIST_ERROR);
         }
-        //产生一个20位的随机盐值
+        // 产生一个20位的随机盐值
         String salt = RandomStringUtils.randomAlphanumeric(20);
-        //对密码加盐哈希
+        // 对密码加盐哈希
         String hashPassword = HashWithSalt.getMd5String(ralData.getPassword() + salt);
         String createAt = GetFormatTime.getTime();
-        //构造User对象
+        // 构造User对象
         User user = new User();
         user.setEmail(ralData.getEmail());
         user.setPassword(hashPassword);
         user.setCreateAt(createAt);
         user.setUpdateAt(createAt);
         user.setSalt(salt);
-        //写入数据库，try增加并发验证
+        // 写入数据库，try增加并发验证
         try {
             userMapper.addAcount(user);
         } catch (DuplicateKeyException e) {
             throw new UserServiceException(ErrorCode.EMAIL_ALREADY_EXIST_ERROR);
         }
-        //构造返回结果
+        // 构造返回结果
         RegisterResponseData registerResponseData = UserConverter.INSTANCE.registerDTO(user);
         log.info("Register request received: {}. resp: {}", ralData, registerResponseData);
         return new ResponseData<>(ErrorCode.SUCCESS, registerResponseData);
@@ -80,23 +80,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData<LoginResponseData> login(RegisterAndLoginRequestData ralData) throws Exception {
         log.info("Login request received: {} ", ralData);
-        //参数校验
+        // 参数校验
         CheckUtils.checkEmailFormat(ralData.getEmail());
         CheckUtils.checkPasswordFormat(ralData.getPassword(), "pwd");
-        //账号校验
+        // 账号校验
         User user = userMapper.selectByEmail(ralData.getEmail());
         if (user == null) {
             throw new UserServiceException(ErrorCode.EMAIL_NOT_EXIST_ERROR);
         }
-        //密码校验
+        // 密码校验
         String hashEnteredPassword = HashWithSalt.getMd5String(ralData.getPassword() + user.getSalt());
         if (!user.getPassword().equals(hashEnteredPassword)) {
             throw new UserServiceException(ErrorCode.PASSWORD_ERROR);
         }
-        //生成不重复的token并写入redis(调用函数)
+        // 生成不重复的token并写入redis(调用函数)
         String token = UUID.randomUUID().toString();
         tokenManage.addToken(token, user.getId());
-        //构造返回result
+        // 构造返回result
         LoginResponseData loginResponseData = UserConverter.INSTANCE.loginDTO(user);
         loginResponseData.setToken(token);
         log.info("Login request received: {}. resp: {}", ralData, loginResponseData);
@@ -105,20 +105,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseData logout(String authorization) throws Exception {
-        //校验token
+        // 校验token
         tokenManage.checkToken(authorization);
-        //删除token
+        // 删除token
         tokenManage.deleteOneToken(authorization);
         return new ResponseData(ErrorCode.SUCCESS, new Object());
     }
 
     @Override
     public ResponseData<GetUserInfoResponseData> getUserInfo(String authorization) throws Exception {
-        //校验token
+        // 校验token
         String id = tokenManage.checkToken(authorization);
-        //根据id查信息
+        // 根据id查信息
         User user = userMapper.selectById(Long.parseLong(id));
-        //构造返回结果
+        // 构造返回结果
         GetUserInfoResponseData getUserInfoResponseData = UserConverter.INSTANCE.getUserInfoDTO(user);
         return new ResponseData<>(ErrorCode.SUCCESS, getUserInfoResponseData);
     }
@@ -126,12 +126,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData updateUserInfo(UpdateUserInfoRequestData updateUserInfoRequestData,
                                        String authorization) throws Exception {
-        //参数校验
+        // 参数校验
         CheckUtils.checkNicknameFormat(updateUserInfoRequestData.getNickname());
         CheckUtils.checkAddressFormat(updateUserInfoRequestData.getAddress());
-        //token校验
+        // token校验
         long id = Long.parseLong(tokenManage.checkToken(authorization));
-        //根据id更新信息
+        // 根据id更新信息
         if (updateUserInfoRequestData.getNickname() != null) {
             userMapper.updateNicknameById(updateUserInfoRequestData.getNickname(), id);
         }
@@ -144,23 +144,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData updatePassword(UpdatePasswordRequestData updatePasswordRequestData,
                                        String authorization) throws Exception {
-        //参数校验
+        // 参数校验
         CheckUtils.checkPasswordFormat(updatePasswordRequestData.getOldPassword(), "oldPwd");
         CheckUtils.checkPasswordFormat(updatePasswordRequestData.getNewPassword(), "newPwd");
-        //token校验
+        // token校验
         long id = Long.parseLong(tokenManage.checkToken(authorization));
-        //根据id修改密码
+        // 根据id修改密码
         User user = userMapper.selectById(id);
-        String hashEnteredPassword = HashWithSalt.getMd5String(updatePasswordRequestData.getOldPassword() + user.getSalt());
-        //这里由于有之前的参数校验，所以不为空
+        String hashEnteredPassword = HashWithSalt.getMd5String(updatePasswordRequestData.getOldPassword()
+                + user.getSalt());
+        // 这里由于有之前的参数校验，所以不为空
         if (!hashEnteredPassword.equals(user.getPassword())) {
             throw new UserServiceException(ErrorCode.OLD_PASSWORD_ERROR);
         }
-        //重新生成盐值,并将数据写入数据库
+        // 重新生成盐值,并将数据写入数据库
         String newSalt = RandomStringUtils.randomAlphanumeric(20);
         String hashPassword = HashWithSalt.getMd5String(updatePasswordRequestData.getNewPassword() + newSalt);
         userMapper.updatePwdById(hashPassword, newSalt, id);
-        //删掉以前的所有token
+        // 删掉以前的所有token
         tokenManage.deleteAllToken(authorization);
         return new ResponseData(ErrorCode.SUCCESS, new Object());
     }

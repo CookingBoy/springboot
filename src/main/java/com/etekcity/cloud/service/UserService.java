@@ -1,8 +1,6 @@
 package com.etekcity.cloud.service;
 
 
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.etekcity.cloud.domain.request.RegisterAndLoginRequestData;
 import com.etekcity.cloud.domain.request.UpdatePasswordRequestData;
 import com.etekcity.cloud.domain.request.UpdateUserInfoRequestData;

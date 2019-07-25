@@ -2,7 +2,6 @@ package com.etekcity.cloud.dao.mapper;
 
 
 import org.apache.ibatis.annotations.*;
-import org.springframework.data.annotation.Id;
 
 import com.etekcity.cloud.domain.User;
 

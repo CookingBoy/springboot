@@ -1,8 +1,6 @@
 package com.etekcity.cloud.common;
 
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.google.gson.JsonSyntaxException;
 import io.lettuce.core.RedisCommandTimeoutException;
 import io.lettuce.core.RedisConnectionException;
@@ -54,7 +52,7 @@ public class GlobalExceptionHandler {
      * mysql与Redis连接数据库错误
      * 也可捕捉MyBatisSystemException错误(MySQL)
      */
-    @ExceptionHandler({PersistenceException.class,RedisConnectionException.class})
+    @ExceptionHandler({PersistenceException.class, RedisConnectionException.class})
     public ResponseData mysqlExceptionHandler(Exception e) {
         log.error("DataBase Error Occured: ", e);
         return new ResponseData(ErrorCode.SERVER_INTERNAL_ERROR, new Object());

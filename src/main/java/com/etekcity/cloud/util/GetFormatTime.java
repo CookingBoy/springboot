@@ -15,9 +15,9 @@ import java.time.format.DateTimeFormatter;
 public class GetFormatTime {
 
     public static String getTime() {
-        //格式化
+        // 格式化
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        //获取当前时间
+        // 获取当前时间
         LocalDateTime localDateTime = LocalDateTime.now();
         return dateTimeFormatter.format(localDateTime);
     }
