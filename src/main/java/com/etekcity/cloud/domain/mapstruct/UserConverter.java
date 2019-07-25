@@ -11,20 +11,23 @@ import com.etekcity.cloud.domain.response.GetUserInfoResponseData;
 import com.etekcity.cloud.domain.response.LoginResponseData;
 import com.etekcity.cloud.domain.response.RegisterResponseData;
 
+/**
+ * DT 转 DTO ，使用 mapstruct
+ *
+ * @author vik
+ */
 @Mapper
 public interface UserConverter {
     UserConverter INSTANCE = Mappers.getMapper(UserConverter.class);
 
     /**
      * User实体对象 转 GetUserInfoResponseData 实体对象
+     *
      * @param user
      * @return
      */
     @Mappings({
             @Mapping(source = "id", target = "userId"),
-            //@Mapping(source = "email", target = "email"),
-            //@Mapping(source = "nickname", target = "nickname"),
-            //@Mapping(source = "address", target = "address"),
             @Mapping(target = "createAt", expression = "java(com.etekcity.cloud.util.GetFormatTime.toUtcTime(user.getCreateAt()))"),
             @Mapping(target = "updateAt", expression = "java(com.etekcity.cloud.util.GetFormatTime.toUtcTime(user.getUpdateAt()))")
     })
@@ -32,6 +35,7 @@ public interface UserConverter {
 
     /**
      * User实体对象 转 LoginResponseData实体对象
+     *
      * @param user
      * @return
      */
@@ -44,6 +48,12 @@ public interface UserConverter {
     })
     LoginResponseData loginDTO(User user);
 
+    /**
+     * User实体对象 转 RegisterResponseData实体对象
+     *
+     * @param user
+     * @return
+     */
     @Mappings({
             @Mapping(source = "id", target = "userId"),
             @Mapping(target = "createAt", expression = "java(com.etekcity.cloud.util.GetFormatTime.toUtcTime(user.getUpdateAt()))")

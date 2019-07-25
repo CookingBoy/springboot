@@ -27,10 +27,10 @@ import com.etekcity.cloud.domain.response.ResponseData;
 public class GlobalExceptionHandler {
 
     /**
-     * 处理自定义的错误码
+     * 处理用户服务错误
      *
-     * @param exception
-     * @return
+     * @param UserServiceException
+     * @return ResponseData
      */
     @ExceptionHandler(UserServiceException.class)
     public ResponseData exceptionHandler(UserServiceException exception) {
@@ -41,18 +41,18 @@ public class GlobalExceptionHandler {
     /**
      * 处理请求参数缺失或格式不对的错误
      *
-     * @param e
+     * @param
      * @return
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseData paramExceptionHandler(Exception e, HttpServletRequest request) {
+    public ResponseData paramExceptionHandler(MethodArgumentNotValidException e) {
         log.info("Request Param Exception Occured: ", e);
         return new ResponseData(ErrorCode.INVALID_REQUEST_PARAM, new Object());
     }
 
     /**
      * mysql与Redis连接数据库错误
-     * MyBatisSystemException 也可以捕捉到
+     * 也可捕捉MyBatisSystemException错误(MySQL)
      */
     @ExceptionHandler({PersistenceException.class,RedisConnectionException.class})
     public ResponseData mysqlExceptionHandler(Exception e) {
@@ -61,10 +61,10 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * redis数据库错误
+     * redis数据库连接超时错误
      */
     @ExceptionHandler(RedisCommandTimeoutException.class)
-    public ResponseData redisExceptionHandler(Exception e) {
+    public ResponseData redisExceptionHandler(RedisCommandTimeoutException e) {
         log.error("Redis Error Occured: ", e);
         return new ResponseData(ErrorCode.SERVER_TIMEOUT, new Object());
     }
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(JsonSyntaxException.class)
-    public ResponseData jsonExceptionHandler(Exception e) {
+    public ResponseData jsonExceptionHandler(JsonSyntaxException e) {
         log.info("Request Json Exception Occured: ", e);
         return new ResponseData(ErrorCode.JSON_PARSE_ERROR, new Object());
     }

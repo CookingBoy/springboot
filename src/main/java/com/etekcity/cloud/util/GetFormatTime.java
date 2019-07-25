@@ -1,13 +1,11 @@
 package com.etekcity.cloud.util;
 
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import javax.xml.crypto.Data;
+
 
 /**
  * 获取格式化的当前时间,采用线程安全的LocalDateTime

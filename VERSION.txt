@@ -1,6 +1,10 @@
 VERSION
 SERVICE.NAME=userservice
 
+SERVICE.VERSION=V1.0.3.0
+CHANGELOG
+【优化】优化了一些代码格式上的问题
+
 SERVICE.VERSION=V1.0.2.0
 CHANGELOG
 【优化】按照peter初步review意见进行了修改，并部署到了服务器

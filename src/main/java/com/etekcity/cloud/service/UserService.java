@@ -44,11 +44,11 @@ public interface UserService {
      * 更新用户信息
      */
     ResponseData updateUserInfo(UpdateUserInfoRequestData updateUserInfoRequestData,
-                                       String authorization) throws Exception;
+                                String authorization) throws Exception;
 
     /**
      * 修改密码
      */
     ResponseData updatePassword(UpdatePasswordRequestData updatePasswordRequestData,
-                                       String authorization) throws Exception;
+                                String authorization) throws Exception;
 }

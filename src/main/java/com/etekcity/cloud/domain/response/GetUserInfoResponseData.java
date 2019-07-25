@@ -2,8 +2,6 @@ package com.etekcity.cloud.domain.response;
 
 
 import lombok.Data;
-import com.etekcity.cloud.domain.User;
-import com.etekcity.cloud.util.GetFormatTime;
 
 /**
  * 获取用户信息API DTO实体类

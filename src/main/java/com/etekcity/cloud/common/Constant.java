@@ -1,5 +1,7 @@
 package com.etekcity.cloud.common;
 
+import java.util.regex.Pattern;
+
 /**
  * 定义所用到的所有常量
  *
@@ -31,4 +33,10 @@ public class Constant {
      */
     public static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+    /**
+     * 参数格式校验正则表达式
+     */
+    public static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+    public static final Pattern PASSWORD_PATTERN = Pattern.compile("^[\\x21-\\x7e]*$");
 }

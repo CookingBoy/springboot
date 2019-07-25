@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         if (!user.getPassword().equals(hashEnteredPassword)) {
             throw new UserServiceException(ErrorCode.PASSWORD_ERROR);
         }
-        //生成token并写入redis(调用函数)，生成不重复的token
+        //生成不重复的token并写入redis(调用函数)
         String token = UUID.randomUUID().toString();
         tokenManage.addToken(token, user.getId());
         //构造返回result

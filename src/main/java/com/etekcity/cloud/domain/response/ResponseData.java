@@ -7,6 +7,7 @@ import com.etekcity.cloud.common.ErrorCode;
 
 /**
  * API Response请求体 实体类
+ *
  * @author vik
  */
 @Data

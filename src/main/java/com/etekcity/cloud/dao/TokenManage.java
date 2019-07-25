@@ -3,10 +3,10 @@ package com.etekcity.cloud.dao;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import java.lang.String;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -117,6 +117,7 @@ public class TokenManage {
 
     /**
      * 根据用户id，生成token list的key
+     *
      * @param id
      * @return
      */
@@ -126,6 +127,7 @@ public class TokenManage {
 
     /**
      * 根据token，生成token string的key
+     *
      * @param token
      * @return
      */
@@ -135,6 +137,7 @@ public class TokenManage {
 
     /**
      * 从鉴权信息中解析token和id
+     *
      * @param authorization
      * @return
      */

@@ -37,7 +37,7 @@ public enum ErrorCode {
     OLD_PASSWORD_ERROR(-20112, "老密码不正确"),
 
     /**
-     * 请求参数错误
+     * 自定义错误码
      */
     INVALID_REQUEST_PARAM(-10101, "请求参数错误"),
     JSON_PARSE_ERROR(-10102, "Json格式错误");
@@ -63,5 +63,4 @@ public enum ErrorCode {
     public String getMsg() {
         return msg;
     }
-
 }

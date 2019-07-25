@@ -5,6 +5,7 @@ import lombok.Data;
 
 /**
  * 用户实体类
+ *
  * @author vik
  */
 @Data
@@ -35,7 +36,7 @@ public class User {
     private String address;
 
     /**
-     * 创建时间(暂时是这个，标准为ISO8601格式)
+     * 创建时间，输出为ISO8601标准格式
      */
     private String createAt;
 

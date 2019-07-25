@@ -2,12 +2,10 @@ package com.etekcity.cloud.util;
 
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.etekcity.cloud.common.Constant;
 import com.etekcity.cloud.common.ErrorCode;
 import com.etekcity.cloud.common.exception.UserServiceException;
-import com.etekcity.cloud.service.UserService;
 
 /**
  * 工具类
@@ -25,8 +23,7 @@ public class CheckUtils {
      * 邮箱格式校验
      */
     public static void checkEmailFormat(String email) throws Exception {
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
-        Matcher matcher = pattern.matcher(email);
+        Matcher matcher = Constant.EMAIL_PATTERN.matcher(email);
         boolean isMatch = matcher.matches();
         if (!isMatch) {
             throw new UserServiceException(ErrorCode.EMAIL_FORMAT_ERROR);
@@ -37,8 +34,7 @@ public class CheckUtils {
      * 密码格式校验
      */
     public static void checkPasswordFormat(String password, String type) throws Exception {
-        Pattern pattern = Pattern.compile("^[\\x21-\\x7e]*$");
-        Matcher matcher = pattern.matcher(password);
+        Matcher matcher = Constant.PASSWORD_PATTERN.matcher(password);
         boolean isMatch = matcher.matches();
         int len = password.length();
         if (len < Constant.PWD_MIN_LENGTH || len > Constant.PWD_MAX_LENGTH || !isMatch) {

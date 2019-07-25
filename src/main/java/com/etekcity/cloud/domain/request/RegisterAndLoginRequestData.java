@@ -24,5 +24,4 @@ public class RegisterAndLoginRequestData {
     public String toString() {
         return "RegisterAndLoginRequestData{ " + "email=" + email + " }";
     }
-
 }
