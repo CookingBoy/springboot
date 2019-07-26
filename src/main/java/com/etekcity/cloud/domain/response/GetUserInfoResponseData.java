@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class GetUserInfoResponseData {
-    private long userId;
+    private String userId;
     private String email;
     private String nickname;
     private String address;

@@ -39,4 +39,9 @@ public class Constant {
      */
     public static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
     public static final Pattern PASSWORD_PATTERN = Pattern.compile("^[\\x21-\\x7e]*$");
+
+    /**
+     * 解析鉴权信息的string数组的长度
+     */
+    public static final int AUTHORIZATION_LIST_LENGTH = 2;
 }

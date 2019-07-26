@@ -1,6 +1,10 @@
 VERSION
 SERVICE.NAME=userservice
 
+SERVICE.VERSION=V1.0.5.0
+CHANGELOG
+【变更】修复鉴权信息前端报错信息格式问题，打印日志时添加访问路径
+
 SERVICE.VERSION=V1.0.4.0
 CHANGELOG
 【优化】根据Java开发规范优化

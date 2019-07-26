@@ -10,6 +10,6 @@ import lombok.Data;
  */
 @Data
 public class RegisterResponseData {
-    private long userId;
+    private String userId;
     private String createAt;
 }

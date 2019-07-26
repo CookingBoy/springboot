@@ -103,7 +103,6 @@ public class TokenManage {
     public void deleteAllToken(String authorization) throws Exception {
         // 获取token和id
         HashMap<String, String> tokenAndIdMap = getInfoFromAuth(authorization);
-        String token = tokenAndIdMap.get("token");
         String id = tokenAndIdMap.get("id");
         // 构造key
         String tokenListValue = getTokenListKey(id);
@@ -141,11 +140,14 @@ public class TokenManage {
      * @param authorization
      * @return
      */
-    private HashMap<String, String> getInfoFromAuth(String authorization) {
+    private HashMap<String, String> getInfoFromAuth(String authorization) throws Exception{
         String[] tokenAndId = authorization.split(" +");
+        if (tokenAndId.length != Constant.AUTHORIZATION_LIST_LENGTH) {
+            throw new UserServiceException(ErrorCode.INVALID_REQUEST_PARAM);
+        }
         HashMap<String, String> tokenAndIdMap = new HashMap<>(2);
-        tokenAndIdMap.put("token", tokenAndId[0]);
-        tokenAndIdMap.put("id", tokenAndId[1]);
+        tokenAndIdMap.put("token", tokenAndId[1]);
+        tokenAndIdMap.put("id", tokenAndId[0]);
         return tokenAndIdMap;
     }
 }

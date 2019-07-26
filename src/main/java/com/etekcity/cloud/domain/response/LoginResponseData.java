@@ -13,7 +13,7 @@ import lombok.Data;
 public class LoginResponseData {
     private String token;
     private long expiresIn;
-    private long userId;
+    private String userId;
     private String email;
     private String nickname;
     private String address;

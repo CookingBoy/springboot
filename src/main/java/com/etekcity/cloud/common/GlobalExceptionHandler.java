@@ -1,6 +1,8 @@
 package com.etekcity.cloud.common;
 
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.gson.JsonSyntaxException;
 import io.lettuce.core.RedisCommandTimeoutException;
 import io.lettuce.core.RedisConnectionException;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.etekcity.cloud.common.exception.UserServiceException;
 import com.etekcity.cloud.domain.response.ResponseData;
@@ -31,13 +34,13 @@ public class GlobalExceptionHandler {
      * @return ResponseData
      */
     @ExceptionHandler(UserServiceException.class)
-    public ResponseData exceptionHandler(UserServiceException exception) {
-        log.info("UserService Exception Occured: {}", exception.getErrorCode().getMsg());
+    public ResponseData exceptionHandler(UserServiceException exception, HttpServletRequest request) {
+        log.info("UserService Exception Occured: {} Path：{}", exception.getErrorCode().getMsg(), request.getRequestURI());
         return new ResponseData(exception.getErrorCode(), new Object());
     }
 
     /**
-     * 处理请求参数缺失或格式不对的错误
+     * 处理请求体中参数缺失或格式不对的错误
      *
      * @param
      * @return
@@ -77,5 +80,16 @@ public class GlobalExceptionHandler {
     public ResponseData jsonExceptionHandler(JsonSyntaxException e) {
         log.info("Request Json Exception Occured: ", e);
         return new ResponseData(ErrorCode.JSON_PARSE_ERROR, new Object());
+    }
+
+    /**
+     * 404 not found错误
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseData notFoundExceptionHandler(NoHandlerFoundException e) {
+        log.info("404 Not Found:  Path:", e);
+        return new ResponseData(ErrorCode.PAGE_NOT_FOUND, new Object());
     }
 }

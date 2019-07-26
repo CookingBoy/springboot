@@ -19,6 +19,7 @@ public enum ErrorCode {
     SERVER_INTERNAL_ERROR(-10001, "服务器内部错误"),
     SERVER_BUSY(-10002, "服务器繁忙"),
     SERVER_TIMEOUT(-10003, "服务器超时"),
+    PAGE_NOT_FOUND(-10004,"404 Not Found"),
 
     /**
      * 用户服务相关错误码
